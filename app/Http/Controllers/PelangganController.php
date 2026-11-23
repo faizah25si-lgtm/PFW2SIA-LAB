@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use index;
 
 class PelangganController extends Controller
@@ -13,6 +14,11 @@ class PelangganController extends Controller
      */
     public function index(Request $request)
     {
+        if (!Auth::check()) {
+            return redirect()
+                ->route('auth.login')
+                ->withErrors('Silahkan login terlebih dahulu');
+        }
         $filterableColumns = ['gender'];
         $searchableColumns = ['first_name'];
         $data['dataPelanggan'] = Pelanggan::filter($request, $filterableColumns)
@@ -26,6 +32,11 @@ class PelangganController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(){
+        if (!Auth::check()) {
+            return redirect()
+                ->route('auth.login')
+                ->withErrors('Silahkan login terlebih dahulu');
+        }
 		return view('admin.pelanggan.create');
     }
 

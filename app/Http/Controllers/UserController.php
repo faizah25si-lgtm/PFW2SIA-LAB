@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -11,6 +12,11 @@ class UserController extends Controller
 {
     public function index()
     {
+        if (!Auth::check()) {
+            return redirect()
+                ->route('auth.login')
+                ->withErrors('Silahkan login terlebih dahulu');
+        }
         $data['dataUser'] = User::all();
 
         return view('admin.user.index', $data);
@@ -18,6 +24,11 @@ class UserController extends Controller
 
     public function create()
     {
+    if (!Auth::check()) {
+            return redirect()
+                ->route('auth.login')
+                ->withErrors('Silahkan login terlebih dahulu');
+        }
         return view('admin.user.create');
     }
 
