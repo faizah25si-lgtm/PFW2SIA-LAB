@@ -14,11 +14,6 @@ class PelangganController extends Controller
      */
     public function index(Request $request)
     {
-        if (!Auth::check()) {
-            return redirect()
-                ->route('auth.login')
-                ->withErrors('Silahkan login terlebih dahulu');
-        }
         $filterableColumns = ['gender'];
         $searchableColumns = ['first_name'];
         $data['dataPelanggan'] = Pelanggan::filter($request, $filterableColumns)

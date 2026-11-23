@@ -52,3 +52,18 @@ Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('auth.logout');
+// Route Terproteksi (Wajib login)
+Route::middleware(['checkislogin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
+
+    // Hanya Super Admin yang bisa mengelola data User
+    Route::middleware(['checkrole:Super Admin'])->group(function () {
+        Route::resource('user', UserController::class);
+    });
+
+    // Super Admin dan Mitra yang bisa mengelola data Pelanggan
+    Route::middleware(['checkrole:Super Admin,Mitra'])->group(function () {
+        Route::resource('pelanggan', PelangganController::class);
+    });
+});

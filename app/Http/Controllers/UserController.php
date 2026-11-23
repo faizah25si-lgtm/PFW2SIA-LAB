@@ -12,11 +12,6 @@ class UserController extends Controller
 {
     public function index()
     {
-        if (!Auth::check()) {
-            return redirect()
-                ->route('auth.login')
-                ->withErrors('Silahkan login terlebih dahulu');
-        }
         $data['dataUser'] = User::all();
 
         return view('admin.user.index', $data);
@@ -24,9 +19,9 @@ class UserController extends Controller
 
     public function create()
     {
-    if (!Auth::check()) {
+        if (!Auth::check()) {
             return redirect()
-                ->route('auth.login')
+                ->route('login')
                 ->withErrors('Silahkan login terlebih dahulu');
         }
         return view('admin.user.create');
@@ -38,6 +33,7 @@ class UserController extends Controller
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|string',
         ]);
 
         $data['password'] = Hash::make($data['password']);
@@ -68,6 +64,7 @@ class UserController extends Controller
                 Rule::unique('users', 'email')->ignore($user->id),
             ],
             'password' => 'nullable|string|min:8|confirmed',
+            'role' => 'required|string',
         ]);
 
         if (!empty($data['password'])) {

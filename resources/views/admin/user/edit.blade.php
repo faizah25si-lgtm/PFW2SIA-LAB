@@ -1,4 +1,3 @@
-
 @extends('layouts.admin.app')
 
 @section('content')
@@ -33,6 +32,18 @@
         <div class="card border-0 shadow components-section">
             <div class="card-body">
 
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul class="mb-0">
@@ -43,27 +54,6 @@
                     </div>
                 @endif
 
-                @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-@if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
-
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul class="mb-0">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
                 <form action="{{ route('user.update', $dataUser->id) }}"
                       method="POST">
                     @csrf
@@ -87,6 +77,15 @@
                                        name="email"
                                        value="{{ old('email', $dataUser->email) }}"
                                        required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Role</label>
+                                <select name="role" id="role" class="form-select" required>
+                                    <option value="Super Admin" {{ old('role', $dataUser->role) == 'Super Admin' ? 'selected' : '' }}>Super Admin</option>
+                                    <option value="Pelanggan" {{ old('role', $dataUser->role) == 'Pelanggan' ? 'selected' : '' }}>Pelanggan</option>
+                                    <option value="Mitra" {{ old('role', $dataUser->role) == 'Mitra' ? 'selected' : '' }}>Mitra</option>
+                                </select>
                             </div>
                         </div>
 
